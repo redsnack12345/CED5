@@ -1,10 +1,21 @@
-# 참여자 및 친구 관리 모듈 (독립 프로토타입)
+# 참여자 및 친구 관리 모듈
 
-Python 표준 라이브러리만 사용합니다. `python test_manage.py`로 테스트합니다.
+## 실행 및 테스트
+`python test_manage.py`
 
-- `participant.py`: `get_participants(room)`, `kick_participant(room, actor_id, target_id)`.
-- 방 데이터 예시: `{'owner_id': 1, 'participants': [1, 2, 3]}`. 추방은 목록을 직접 변경하며 변경 후 인원수를 반환합니다.
-- `friend.py`: `FriendManager(user_ids)` 생성 후 `add_friend`, `remove_friend`, `get_friends`, `block_user`, `unblock_user`, `get_blocked_users` 사용.
-- 친구는 즉시 양방향 등록, 차단은 단방향이며 친구 관계를 삭제합니다. 어느 방향으로든 차단된 상태에서는 친구 등록을 금지합니다. 차단 해제는 친구 관계를 복원하지 않습니다.
+## 친구 관리 함수
+- `search_users(actor_id, keyword="")`: 전체 사용자 검색
+- `get_room_recommendations(actor_id, room)`: 같은 방 참여자 추천
+- `send_friend_request(actor_id, target_id)`: 친구 요청
+- `get_received_requests(actor_id)` / `get_sent_requests(actor_id)`: 요청 목록
+- `accept_friend_request(actor_id, sender_id)`: 수락 및 양방향 친구 성립
+- `reject_friend_request(actor_id, sender_id)`: 거절 및 요청 삭제
+- `cancel_friend_request(actor_id, target_id)`: 보낸 요청 취소
+- `get_friends`, `remove_friend`, `block_user`, `unblock_user`, `get_blocked_users`
 
-임시 규칙이며 팀의 합의에 따라 변경할 수 있습니다. 현재 메모리 기반으로 실행 종료 시 데이터가 사라집니다. 로그인 연동, 영구 저장, UI, 재참여 제한 및 매칭 차단은 미구현입니다. 통합할 때 actor_id는 서버에서 인증된 사용자 ID로 전달해야 하며 데이터 변경을 공통 저장소에 반영해야 합니다. 기존 app.py는 변경하지 않습니다.
+## 참여자 관리 함수
+- `get_participants(room)`, `is_participant(room, user_id)`
+- `kick_participant(room, actor_id, target_id)`
+
+현재는 메모리 저장 프로토타입입니다. 서버 종료 시 데이터가 사라집니다.
+실제 프로젝트 연결 시 로그인 사용자 ID를 서버에서 확인하고, 친구/요청/차단 상태를 공통 저장소에 영구 저장해야 합니다.
